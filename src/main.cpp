@@ -7,7 +7,7 @@
 const std::string botToken = "Discord bot token";
 const std::string channelId = "Discord channel id";
 
-#ifdef _WIN32
+
 // Escape string for Windows cmd.exe (double quotes + backslashes)
 std::string PreventEscapeFromCmd(const std::string& str) {
     std::string result;
@@ -18,7 +18,7 @@ std::string PreventEscapeFromCmd(const std::string& str) {
     }
     return result;
 }
-#endif
+
 
 // Send a Discord message to a channel using curl
 void sendDiscordMessage(const std::string& token, const std::string& channelId, const std::string& message) {
