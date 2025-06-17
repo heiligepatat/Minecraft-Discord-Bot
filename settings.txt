@@ -1,0 +1,14 @@
+DO NOT CHANGE ORDER OF SETTINGS OR DELETE THEM
+
+#Notify when new player joins (TRUE or FALSE)
+TRUE
+#Notify when returning player joins (TRUE or FALSE)
+TRUE
+#Notify when player leaves (TRUE or FALSE)
+TRUE
+#Update playercount routinely (HOURS:MINUTES), (0,0) to disable updating playercount routinely (e.g. 2:30 for 2 hours 30 minutes, use integers)
+0:0
+#Update joined player every (MINUTES) minutes
+5
+
+
