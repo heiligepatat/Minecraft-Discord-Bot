@@ -4,8 +4,8 @@
 #include <chrono>
 #include <cstdlib>
 #include <thread>
-const std::string botToken = "Discord bot token";
-const std::string channelId = "Discord channel id";
+#include <fstream>
+
 
 
 // Escape string for Windows cmd.exe (double quotes + backslashes)
@@ -56,6 +56,29 @@ void sendDiscordMessage(const std::string& token, const std::string& channelId, 
 
 int main(){
     std::cout << std::endl << "Discord bot started" << std::endl;
+
+    //read bot token and channel id
+    std::ifstream input_file("../bot.txt");
+    if (!input_file.is_open()) {
+        std::cerr << "Error: Could not open the file.\n";
+        return 1;
+    }
+    std::string line, botToken, channelId;
+    int line_nummer = 1;
+    while (std::getline(input_file, line)) {
+        if (line_nummer == 2){
+            botToken = line;
+        }else if (line_nummer == 4){
+            channelId = line;
+        }
+        line_nummer++;
+    }
+
+    // Set read possition to 0 on startup
+    std::ofstream posOut("../position.dat");
+    posOut << 0;  
+    posOut.close();
+
     while(true){
         std::string input;
         std::getline(std::cin, input);
