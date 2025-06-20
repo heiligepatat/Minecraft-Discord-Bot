@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <thread>
 #include <fstream>
-
+#include "playercount.hpp"
 
 
 // Escape string for Windows cmd.exe (double quotes + backslashes)
@@ -73,6 +73,8 @@ int main(){
         }
         line_nummer++;
     }
+    bot bot(botToken, channelId);
+    
 
     // Set read possition to 0 on startup
     std::ofstream posOut("../position.dat");

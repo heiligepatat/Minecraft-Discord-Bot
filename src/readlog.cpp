@@ -12,14 +12,13 @@ std::string getusername(const std::string& line) {
     }
     //username should be
     std::string username = line.substr(first_space,end);
-
     return username;
 }
 
 
 
 
-void newlogins(std::vector<std::string>& usernames){
+void playerlogins_logouts(std::vector<std::string>& logins, std::vector<std::string>& logouts){
     //Check if position.dat
     std::streampos lastPos = 0;
     std::ifstream posIn("../position.dat");
@@ -35,28 +34,32 @@ void newlogins(std::vector<std::string>& usernames){
         return;
     } 
     file.seekg(lastPos);
-
-    std::vector<std::string> logins;
-    std::vector<std::string> logouts;
     std::string word, line;
-
+    std::streampos lastValidPos = file.tellg();
      while (std::getline(file, line)) {
         size_t size = line.size();
         if (line.substr(size - 22) == " appears in the realm.") {
             logins.push_back(getusername(line.substr(11,size - 33)));
         }else if (line.substr(size - 18) == " enters the realm."){
             logins.push_back(getusername(line.substr(11,size - 29)));
+        }else if (line.substr(size - 23) == " appears from the Void."){
+            logins.push_back(getusername(line.substr(11,size - 34)));
+        }else if (line.substr(size - 30) == " disappears into the darkness."){
+            logouts.push_back(getusername(line.substr(11,size - 41)));
         }
+        lastValidPos = file.tellg();
     }
+    std::ofstream posOut("position.dat");
+    posOut << lastValidPos;  // Save current read position
+    posOut.close();
     
     for (size_t i = 0; i < logins.size(); i++){
         std::cout << logins[i] << std::endl;
     }
     
     // Save the new file position for next time
-    std::ofstream posOut("position.dat");
-    posOut << file.tellg();  // Save current read position
-    posOut.close();    
+    
+    file.close();
 }
 int main(){
     std::cout << std::endl << "readlog started" << std::endl;
@@ -65,5 +68,5 @@ int main(){
     posOut.close();
 
     std::vector<std::string> usernames;
-    newlogins(usernames);
+    playerlogins_logouts(usernames, usernames);
 }
