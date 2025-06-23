@@ -10,8 +10,8 @@
 
 int main(){
     //cooldown between checks in minutes
-    int cooldown = 5;
-    std::string serverip = "hegicchronicles.com";
+    int cooldown;
+    std::string serverip;
     std::cout << std::endl << "Discord bot started" << std::endl;
 
     //read bot token and channel id
@@ -27,20 +27,23 @@ int main(){
             botToken = line;
         }else if (line_nummer == 4){
             channelId = line;
+        }else if (line_nummer == 6){
+            serverip = line;
+        }else if (line_nummer == 8){
+            cooldown = std::stoi(line);
         }
         line_nummer++;
     }
     bot bot(botToken, channelId, cooldown, serverip);
 
     while(true){
-        std::string input;
-        std::getline(std::cin, input);
         std::cout << "Tryin to send message" << std::endl;
         bot.pingserver();
         bot.get_online_players();
         bot.update_logins_logouts();
         bot.update_discord();
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         std::cout << "Message should be sent" << std::endl;
+        std::this_thread::sleep_for(std::chrono::minutes(bot.get_cooldown()));
         }
 }

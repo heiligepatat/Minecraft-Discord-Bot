@@ -14,17 +14,20 @@ public:
     void get_online_players();
     void update_discord();
     void pingserver();
+    int get_cooldown();
 
 private:
+    std::string bottoken_;
+    std::string channelid_;
+    int cooldown_;
+    std::string serverip_;
     std::vector<std::string> previous_online_;
     std::vector<std::string> online_;
     std::vector<std::string> logins_;
     std::vector<std::string> logouts_;
     int playercount_;
-    std::string bottoken_;
-    std::string channelid_;
-    std::string serverip_;
-    int cooldown_;
+    
+    
     
 } ;
 #endif

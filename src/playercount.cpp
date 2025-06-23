@@ -11,7 +11,7 @@ bot::bot(std::string bottoken, std::string channelid, int cooldown, std::string 
     online_ = std::vector<std::string>(0);
     logins_ = std::vector<std::string>(0);
     logouts_ = std::vector<std::string>(0);
-    int playercount_ = 0;
+    playercount_ = 0;
 
     // Check whether valid, might differ from bot to bot
     assert(bottoken_.length() == 72);
@@ -21,12 +21,12 @@ bot::bot(std::string bottoken, std::string channelid, int cooldown, std::string 
 
 void bot::update_discord(){
     std::string message;
-    for (int i = 0; i < logins_.size(); ++i){
+    for (size_t i = 0; i < logins_.size(); ++i){
         message = logins_[i] + " joined the server";
         std::cout << message << std::endl;
         sendDiscordMessage(bottoken_, channelid_, message);
     }
-    for (int i = 0; i < logouts_.size(); ++i){
+    for (size_t i = 0; i < logouts_.size(); ++i){
         message = logouts_[i] + " left the server";
         std::cout << message << std::endl;
         sendDiscordMessage(bottoken_, channelid_, message);
@@ -42,7 +42,6 @@ void bot::get_online_players() {
     std::string content;
     std::cout << std::endl;
     online_ =  {};
-    playercount_ = 0;
     std::getline(file, content);  
     file.close();
     std::string playercount = "";
@@ -65,7 +64,7 @@ void bot::get_online_players() {
             }
             i = i+8;
             // find the "name_clean" key and get the associated username value
-            while (online_.size() != playercount_ && content[i] != ']'){
+            while (online_.size() != static_cast<size_t>(playercount_) && content[i] != ']'){
                 while (",\"name_clean\":\"" != content.substr(i, 15) && content[i] != ']'){
                     i++;
                 }
@@ -93,16 +92,16 @@ void bot::get_online_players() {
 void bot::update_logins_logouts(){
     logins_ = {};
     logouts_ = {};
-    for (int i = 0; i < online_.size(); ++i){
+    for (size_t i = 0; i < online_.size(); ++i){
         std::cout << online_[i] << std::endl;
     }
-    for (int i = 0; i < previous_online_.size(); ++i){
+    for (size_t i = 0; i < previous_online_.size(); ++i){
         std::cout << previous_online_[i] << std::endl;
     }
 
-    for (int i = 0; i < online_.size(); ++i){
+    for (size_t i = 0; i < online_.size(); ++i){
         bool logged_in = true;
-        for (int j = 0; j < previous_online_.size(); ++j){
+        for (size_t j = 0; j < previous_online_.size(); ++j){
             if (online_[i] == previous_online_[j]){
                 logged_in = false;
             }        
@@ -112,9 +111,9 @@ void bot::update_logins_logouts(){
         }
     }
 
-    for (int i = 0; i < previous_online_.size(); ++i){
+    for (size_t i = 0; i < previous_online_.size(); ++i){
         bool logged_out = true;
-        for (int j = 0; j < online_.size(); ++j){
+        for (size_t j = 0; j < online_.size(); ++j){
             if (online_[j] == previous_online_[i]){
                 logged_out = false;
             }        
@@ -132,4 +131,7 @@ void bot::pingserver(){
     if (ret != 0) {
         std::cerr << "curl command failed with exit code " << ret << std::endl;
     }
+}
+int bot::get_cooldown(){
+    return cooldown_;
 }

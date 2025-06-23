@@ -1,0 +1,8 @@
+Discord bot token:
+
+Discord channel id:
+
+Server ip:
+example.com
+cooldown (in minutes, at least 1 minute):
+2
