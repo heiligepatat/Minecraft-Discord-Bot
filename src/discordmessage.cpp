@@ -1,5 +1,5 @@
 #include "discordmessage.hpp"
-
+#include "printdebug.hpp"
 
 static std::string PreventEscapeFromCmd(const std::string& str) {
     std::string result;
@@ -35,9 +35,12 @@ void sendDiscordMessage(const std::string& token, const std::string& channelId, 
     // On Linux, wrap payload in single quotes instead of double quotes
     std::string command = "curl -s -X POST https://discord.com/api/v10/channels/" + channelId +
                           "/messages -H \"Authorization: Bot " + token +
-                          "\" -H \"Content-Type: application/json\" -d '" + NewPayload + "'";
+                          "\" -H \"Content-Type: application/json\" -d '" + payload + "'";
+    std::cout << command << std::endl;
 #endif
     // NOT TESTED ON LINUX, FORMAT OF "command" SHOULD BE RIGHT
+    debug_print("Curl command to update discord");
+    debug_print(command);
     int ret = system(command.c_str());
     if (ret != 0) {
         std::cerr << "curl command failed with exit code " << ret << std::endl;

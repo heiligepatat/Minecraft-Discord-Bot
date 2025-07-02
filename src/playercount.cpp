@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "discordmessage.hpp"
+#include "printdebug.hpp"
 bot::bot(std::string bottoken, std::string channelid, int cooldown, std::string serverip)
     : bottoken_(bottoken), channelid_(channelid), cooldown_(cooldown), serverip_(serverip)
 {
@@ -31,6 +32,10 @@ void bot::update_discord(){
         std::cout << message << std::endl;
         sendDiscordMessage(bottoken_, channelid_, message);
     }
+    /*
+    message = "Currently " + playercount_ + " players online";
+    sendDiscordMessage(bottoken_, channelid_, message);
+    */
 }
 
 void bot::get_online_players() {
@@ -92,11 +97,13 @@ void bot::get_online_players() {
 void bot::update_logins_logouts(){
     logins_ = {};
     logouts_ = {};
+    debug_print("Online players");
     for (size_t i = 0; i < online_.size(); ++i){
-        std::cout << online_[i] << std::endl;
+        debug_print(online_[i]);
     }
+    debug_print("Players that were online");
     for (size_t i = 0; i < previous_online_.size(); ++i){
-        std::cout << previous_online_[i] << std::endl;
+        debug_print(previous_online_[i]);
     }
 
     for (size_t i = 0; i < online_.size(); ++i){
@@ -127,6 +134,8 @@ void bot::update_logins_logouts(){
 }
 void bot::pingserver(){
     std::string command = "curl https://api.mcstatus.io/v2/status/java/" + serverip_ + " > ../server_info.txt"; 
+    debug_print("Curl command to ping server");
+    debug_print(command);
     int ret = system(command.c_str());
     if (ret != 0) {
         std::cerr << "curl command failed with exit code " << ret << std::endl;

@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -Wall
+CXXFLAGS = -Wall -DNDEBUG -DDEBUG
 
 # Files
 SRCS = main.cpp discordmessage.cpp playercount.cpp
@@ -10,11 +10,14 @@ TARGET = serverbot
 compile_bot: $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
 
-main.o: main.cpp playercount.hpp
+main.o: main.cpp playercount.hpp printdebug.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-discordmessage.o: discordmessage.cpp discordmessage.hpp
+discordmessage.o: discordmessage.cpp discordmessage.hpp printdebug.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-playercount.o: playercount.cpp playercount.hpp discordmessage.hpp
+playercount.o: playercount.cpp playercount.hpp discordmessage.hpp printdebug.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	$(RM) -f *.o serverbot
